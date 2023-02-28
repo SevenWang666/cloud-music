@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import Home from "../application/Home";
 import Recommend from "../application/Recommend";
 import Singers from "../application/Singers";
+import Album from "../application/Album";
 import Rank from "../application/Rank";
 
 const routeList = [
@@ -19,6 +20,12 @@ const routeList = [
       {
         path: "/recommend",
         component: Recommend,
+        routes: [
+          {
+            path: "/recommend/:id",
+            component: Album,
+          },
+        ],
       },
       {
         path: "/singers",
