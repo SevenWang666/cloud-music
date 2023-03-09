@@ -34,8 +34,8 @@ function Recommend(props) {
           <RecommendList recommendList={recommendListJS}></RecommendList>
         </div>
       </Scroll>
-      {renderRoutes(props.route.routes)}
       {enterLoading ? <Loading /> : ""}
+      {renderRoutes(props.route.routes)}
     </Content>
   );
 }

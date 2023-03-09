@@ -11,6 +11,15 @@ export const getCount = (count) => {
   }
 };
 
+export const getName = (list) => {
+  let str = "";
+  list.map((item, index) => {
+    str += index === 0 ? item.name : "/" + item.name;
+    return item;
+  });
+  return str;
+};
+
 export const debounce = (fn, delay) => {
   let timer;
   return (...args) => {
