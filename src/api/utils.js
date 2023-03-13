@@ -46,3 +46,5 @@ export const filterIdx = (name) => {
   }
   return null;
 };
+
+export const isEmptyObject = (obj) => !obj || Object.keys(obj).length === 0;

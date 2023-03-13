@@ -5,6 +5,7 @@ import Scroll from "../../baseUI/scroll";
 import * as actionTypes from "./store/action";
 import Loading from "../../baseUI/loading";
 import LazyLoad, { forceCheck } from "react-lazyload";
+import { renderRoutes } from "react-router-config";
 import {
   DataContext,
   CHANGE_ALPHA,
@@ -65,13 +66,20 @@ function Singers(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const enterDetail = (id) => {
+    props.history.push(`/singers/${id}`);
+  };
+
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
     return (
       <List>
         {singerListJS.map((item, index) => {
           return (
-            <ListItem key={item.accountId + "" + index}>
+            <ListItem
+              key={item.accountId + "" + index}
+              onClick={() => enterDetail(item.id)}
+            >
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -133,6 +141,7 @@ function Singers(props) {
         </Scroll>
       </ListContainer>
       <Loading show={enterLoading} />
+      {renderRoutes(props.route.routes)}
     </div>
   );
 }
