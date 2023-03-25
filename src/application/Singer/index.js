@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CSSTransition } from "react-transition-group";
+import { connect } from "react-redux";
 import { HEADER_HEIGHT } from "./../../api/config";
 import Scroll from "../../baseUI/scroll";
 import SongsList from "../SongList";
+import Loading from "../../baseUI/loading";
+import { changeEnterLoading, getSingerInfo } from "./store/action";
 import {
   Container,
   ImgWrapper,
@@ -13,7 +16,20 @@ import {
 import Header from "../../baseUI/header";
 
 function Singer(props) {
+  const { artist: immutableArtist, songs: immutableSongs, loading } = props;
+
+  const { getSingerDataDispatch } = props;
+
+  const artist = immutableArtist.toJS();
+  const songs = immutableSongs.toJS();
+
   const [showStatus, setShowStatus] = useState(true);
+
+  useEffect(() => {
+    const id = props.match.params.id;
+    getSingerDataDispatch(id);
+    // 之前写的 UI 处理逻辑省略
+  }, []);
 
   const collectButton = useRef();
   const imageWrapper = useRef();
@@ -41,113 +57,6 @@ function Singer(props) {
   const setShowStatusFalse = useCallback(() => {
     setShowStatus(false);
   }, []);
-
-  const artist = {
-    picUrl:
-      "https://p2.music.126.net/W__FCWFiyq0JdPtuLJoZVQ==/109951163765026271.jpg",
-    name: "薛之谦",
-    hotSongs: [
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑",
-        },
-      },
-      // 省略 20 条
-    ],
-  };
 
   const handleScroll = useCallback((pos) => {
     let height = initialHeight.current;
@@ -214,12 +123,27 @@ function Singer(props) {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll onScroll={handleScroll} ref={songScroll}>
-            <SongsList songs={artist.hotSongs} showCollect={false}></SongsList>
+            <SongsList songs={songs} showCollect={false}></SongsList>
           </Scroll>
         </SongListWrapper>
+        <Loading show={loading} />
       </Container>
     </CSSTransition>
   );
 }
+const mapStateToProps = (state) => ({
+  artist: state.getIn(["singer", "artist"]),
+  songs: state.getIn(["singer", "songsOfArtist"]),
+  loading: state.getIn(["singer", "loading"]),
+});
 
-export default Singer;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getSingerDataDispatch(id) {
+      dispatch(changeEnterLoading(true));
+      dispatch(getSingerInfo(id));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Singer));
