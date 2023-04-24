@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
 import { HEADER_HEIGHT } from "./../../api/config";
+import MusicNote from "../../baseUI/music-note/index";
 import Scroll from "../../baseUI/scroll";
 import SongsList from "../SongList";
 import Loading from "../../baseUI/loading";
@@ -39,6 +40,11 @@ function Singer(props) {
   const layer = useRef();
   // 图片初始高度
   const initialHeight = useRef(0);
+
+  const musicNoteRef = useRef();
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
 
   // 往上偏移的尺寸，露出圆角
   const OFFSET = 5;
@@ -123,10 +129,15 @@ function Singer(props) {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll onScroll={handleScroll} ref={songScroll}>
-            <SongsList songs={songs} showCollect={false}></SongsList>
+            <SongsList
+              songs={songs}
+              showCollect={false}
+              musicAnimation={musicAnimation}
+            ></SongsList>
           </Scroll>
         </SongListWrapper>
         <Loading show={loading} />
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );

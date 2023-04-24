@@ -32,8 +32,8 @@ function Home(props) {
           </TabItem>
         </NavLink>
       </Tab>
-      <Player />
       {renderRoutes(route.routes)}
+      <Player />
     </div>
   );
 }

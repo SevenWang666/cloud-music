@@ -22,6 +22,7 @@ function Singers(props) {
     pageCount,
     pullUpLoading,
     pullDownLoading,
+    songsCount,
   } = props;
   const {
     updateDispatch,
@@ -129,7 +130,7 @@ function Singers(props) {
           oldVal={alpha}
         />
       </NavContainer>
-      <ListContainer>
+      <ListContainer play={songsCount}>
         <Scroll
           pullUp={handlePullUp}
           pullDown={handlePullDown}
@@ -152,6 +153,7 @@ const mapStateToProps = (state) => ({
   pullUpLoading: state.getIn(["singers", "pullUpLoading"]),
   pullDownLoading: state.getIn(["singers", "pullDownLoading"]),
   pageCount: state.getIn(["singers", "pageCount"]),
+  songsCount: state.getIn(["player", "playList"]).size,
 });
 
 const mapActionToProps = (dispatch) => {

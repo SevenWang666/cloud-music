@@ -51,22 +51,19 @@ function Player(props) {
 
   //歌曲播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
-
   const playList = immutablePlayList.toJS();
-  console.log(playList);
-  console.log("🚀huojain");
   const sequencePlayList = immutableSequencePlayList.toJS();
   const currentSong = immutableCurrentSong.toJS();
 
   useEffect(() => {
     if (!currentSong) return;
-    changeCurrentIndexDispatch(0); //currentIndex默认为-1，临时改成0
+    if (!playList.length) return;
     let current = playList[0];
     changeCurrentDispatch(current); //赋值currentSong
-    audioRef.current.src = getSongUrl(current.id);
-    setTimeout(() => {
-      audioRef.current.play();
-    });
+    audioRef.current.src = getSongUrl(current?.id);
+    // setTimeout(() => {
+    //   audioRef.current.play();
+    // });
     togglePlayingDispatch(true); //播放状态
     setCurrentTime(0); //从头开始播放
     setDuration((current.dt / 1000) | 0); //时长
